@@ -1,28 +1,19 @@
 'use strict';
 
-const net = require('net');
+// Requiring in socket.io and setting port to 3000
+const io = require('socket.io')(3000);
 
-const port = process.env.PORT || 3001;
-const server = net.createServer();
+io.on('connection', (socket) => {
+  console.log('Connected >> ', socket.id);
 
-server.listen(port, () => console.log(`Server up on ${port}`) );
+  socket.on('save', (payload) => {
+    socket.broadcast.emit('save', payload);
+  });
 
-let socketPool = {};
-
-server.on('connection', (socket) => {
-  const id = `Socket-${Math.random()}`;
-  socketPool[id] = socket;
-  socket.on('data', (buffer) => dispatchEvent(buffer));
-  socket.on('close', () => {
-    delete socketPool[id];
+  socket.on('error', (payload) => {
+    socket.broadcast.emit('error', payload);
   });
 });
 
-let dispatchEvent = (buffer) => {
-  let text = buffer.toString().trim();
-  for (let socket in socketPool) {
-    socketPool[socket].write(`${text}`);
-  }
-};
 
 

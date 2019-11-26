@@ -1,30 +1,12 @@
 'use strict';
 
-const net = require('net');
-const socket = new net.Socket();
+const io = require('socket.io-client');
+const socket = io.connect('http://localhost:3000');
 
-let config = {
-  port: 3001,
-  host: 'localhost',
-};
-
-// Listen for a 'connect' event, and call the anon function specified
-socket.on('connect', () => {
-  console.log('Logger.js >> connected!');
+socket.on('save', (payload) => {
+  console.log(`File ${payload} changed successfully`);
 });
 
-// Connect to TCP server
-socket.connect(config, () => {
-  console.log('connected to server!');
-});
-
-socket.on('close', () => {
-  console.log('I am closing!');
-});
-  
-
-// Listen for the 'data' event, and call the anon function specified
-socket.on('data', data => {
-  console.log('Logger.js >> I just received data from an outside source!');
-  console.log('Logger.js >> That data is:', data.toString());
+socket.on('err', (payload) => {
+  console.log(`File change error ${payload}`);
 });
