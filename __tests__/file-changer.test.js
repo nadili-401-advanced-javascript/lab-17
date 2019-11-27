@@ -13,5 +13,4 @@ describe('File Changer', () => {
       expect(error).toBe('Invalid file');
     }
   });
-
 });
