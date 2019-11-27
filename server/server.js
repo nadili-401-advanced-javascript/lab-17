@@ -4,7 +4,7 @@
 const io = require('socket.io')(3000);
 
 io.on('connection', (socket) => {
-  console.log('Connected >> ', socket.id);
+  console.log('Connected on: ', socket.id);
 
   socket.on('save', (payload) => {
     socket.broadcast.emit('save', payload);
