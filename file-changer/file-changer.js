@@ -19,8 +19,6 @@ const wf = typeof fs.writeFile === 'function' ?
 const io = require('socket.io-client');
 const socket = io.connect('http://localhost:3000');
 
-
-
 // read file
 const readFile = async (file) => {
   return await rf(file);
@@ -37,20 +35,17 @@ const writeFile = async (file) => {
 const alterFile = async (file) => {
 
   try {
-    
-    let data = await readFile(file);
-
-    //Log data before alter file content
-    socket.emit('save', data);
-    await writeFile(file);
-  
+   
+    await writeFile(file); 
     let newData = await readFile(file);
-
     //Log data after alter file content
     socket.emit('save', newData);
   } catch (e){
+
     socket.emit('error', e.message);
+
   }
+  socket.close();
 };
 
 module.exports = { readFile, writeFile, alterFile };

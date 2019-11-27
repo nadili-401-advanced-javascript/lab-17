@@ -4,7 +4,7 @@ const io = require('socket.io-client');
 const socket = io.connect('http://localhost:3000');
 
 socket.on('save', (payload) => {
-  console.log(`File ${payload} changed successfully`);
+  console.log(`New file content: ${payload}`);
 });
 
 socket.on('err', (payload) => {
